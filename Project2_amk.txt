@@ -1,0 +1,591 @@
+SQL> 
+SQL> --drop tables
+SQL> DROP TABLE APPTDETAIL_amk;
+
+Table dropped.
+
+SQL> DROP TABLE APPOINTMENT_amk;
+
+Table dropped.
+
+SQL> DROP TABLE REASON_amk;
+
+Table dropped.
+
+SQL> DROP TABLE STATUS_amk;
+
+Table dropped.
+
+SQL> DROP TABLE BLOCK_amk;
+
+Table dropped.
+
+SQL> DROP TABLE PATIENT_amk;
+
+Table dropped.
+
+SQL> DROP TABLE DOCTOR_amk;
+
+Table dropped.
+
+SQL> DROP TABLE BILLINGTYPE_amk;
+
+Table dropped.
+
+SQL> DROP TABLE INSCO_amk;
+
+Table dropped.
+
+SQL> 
+SQL> --Part Ia. Create Tables
+SQL> 
+SQL> CREATE TABLE INSCO_amk (
+  2  InsCoID	     NUMBER(3,0),
+  3  InsCoName	     VARCHAR(20),
+  4  PRIMARY KEY (InsCoID)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE BILLINGTYPE_amk (
+  2  Billingtype	     VARCHAR(2),
+  3  BillingTypeDesc VARCHAR(20)     NOT NULL,
+  4  PRIMARY KEY (BillingType)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE DOCTOR_amk (
+  2  DoctorID		     NUMBER(1,0),
+  3  DoctorFName     VARCHAR(20)     NOT NULL,
+  4  DoctorLName     VARCHAR(20)     NOT NULL,
+  5  PRIMARY KEY (DoctorID)
+  6  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE PATIENT_amk (
+  2  PatientID		     NUMBER(3,0),
+  3  PatientFName    VARCHAR(20)     NOT NULL,
+  4  PatientLName    VARCHAR(20)     NOT NULL,
+  5  PatientPhone    VARCHAR(10),
+  6  PRIMARY KEY (PatientID)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE BLOCK_amk (
+  2  BlockCode	     CHAR(2),
+  3  BlockDesc	     VARCHAR(10)     NOT NULL,
+  4  BlockTime		     VARCHAR(10)     NOT NULL,
+  5  PRIMARY KEY (BlockCode)
+  6  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE STATUS_amk (
+  2  ApptStatusCode  CHAR(2),
+  3  ApptStatusDesc  VARCHAR(20)     NOT NULL,
+  4  PRIMARY KEY (ApptStatusCode)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE REASON_amk (
+  2  ApptReasonCode  VARCHAR(3),
+  3  ApptReasonDesc  VARCHAR(30)     NOT NULL,
+  4  PRIMARY KEY (ApptReasonCode)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE APPOINTMENT_amk (
+  2  ApptID	     NUMBER(3,0),
+  3  ApptDate		     DATE	     NOT NULL,
+  4  ApptTime		     VARCHAR(10)     NOT NULL,
+  5  PatientID		     NUMBER(3,0)     NOT NULL,
+  6  DoctorID		     NUMBER(1,0)     NOT NULL,
+  7  BillingType     VARCHAR(2)      NOT NULL,
+  8  InsCoID	     NUMBER(3,0),
+  9  ApptStatusCode  CHAR(2)	     NOT NULL,
+ 10  PRIMARY KEY (ApptID),
+ 11  FOREIGN KEY (InsCoID) REFERENCES INSCO_amk,
+ 12  FOREIGN KEY (BillingType) REFERENCES BILLINGTYPE_amk,
+ 13  FOREIGN KEY (DoctorID) REFERENCES DOCTOR_amk,
+ 14  FOREIGN KEY (PatientID) REFERENCES PATIENT_amk,
+ 15  FOREIGN KEY (ApptStatusCode) REFERENCES STATUS_amk
+ 16  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE APPTDETAIL_amk (
+  2  ApptID	     NUMBER(3,0),
+  3  ApptReasonCode  VARCHAR(3),
+  4  BlockCode	     CHAR(2)	     NOT NULL,
+  5  PRIMARY KEY (ApptID, ApptReasonCode),
+  6  FOREIGN KEY (BlockCode) REFERENCES BLOCK_amk
+  7  );
+
+Table created.
+
+SQL> 
+SQL> --Part Ib. Describe Tables
+SQL> 
+SQL> DESCRIBE INSCO_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ INSCOID                                   NOT NULL NUMBER(3)
+ INSCONAME                                          VARCHAR2(20)
+
+SQL> DESCRIBE BILLINGTYPE_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BILLINGTYPE                               NOT NULL VARCHAR2(2)
+ BILLINGTYPEDESC                           NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE DOCTOR_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DOCTORID                                  NOT NULL NUMBER(1)
+ DOCTORFNAME                               NOT NULL VARCHAR2(20)
+ DOCTORLNAME                               NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE PATIENT_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PATIENTID                                 NOT NULL NUMBER(3)
+ PATIENTFNAME                              NOT NULL VARCHAR2(20)
+ PATIENTLNAME                              NOT NULL VARCHAR2(20)
+ PATIENTPHONE                                       VARCHAR2(10)
+
+SQL> DESCRIBE BLOCK_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLOCKCODE                                 NOT NULL CHAR(2)
+ BLOCKDESC                                 NOT NULL VARCHAR2(10)
+ BLOCKTIME                                 NOT NULL VARCHAR2(10)
+
+SQL> DESCRIBE STATUS_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ APPTSTATUSCODE                            NOT NULL CHAR(2)
+ APPTSTATUSDESC                            NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE REASON_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ APPTREASONCODE                            NOT NULL VARCHAR2(3)
+ APPTREASONDESC                            NOT NULL VARCHAR2(30)
+
+SQL> DESCRIBE APPOINTMENT_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ APPTID                                    NOT NULL NUMBER(3)
+ APPTDATE                                  NOT NULL DATE
+ APPTTIME                                  NOT NULL VARCHAR2(10)
+ PATIENTID                                 NOT NULL NUMBER(3)
+ DOCTORID                                  NOT NULL NUMBER(1)
+ BILLINGTYPE                               NOT NULL VARCHAR2(2)
+ INSCOID                                            NUMBER(3)
+ APPTSTATUSCODE                            NOT NULL CHAR(2)
+
+SQL> DESCRIBE APPTDETAIL_amk
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ APPTID                                    NOT NULL NUMBER(3)
+ APPTREASONCODE                            NOT NULL VARCHAR2(3)
+ BLOCKCODE                                 NOT NULL CHAR(2)
+
+SQL> 
+SQL> --Part II. Insert Data
+SQL> 
+SQL> INSERT ALL
+  2  	     INTO INSCO_amk VALUES (323,'Humana')
+  3  	     INTO INSCO_amk VALUES (129,'Blue Cross')
+  4  	     INTO INSCO_amk VALUES (210,'State Farm')
+  5  	     INTO INSCO_amk VALUES (135,'TriCare')
+  6  	     INTO BILLINGTYPE_amk VALUES ('I','Insurance')
+  7  	     INTO BILLINGTYPE_amk VALUES ('SP','Self Pay')
+  8  	     INTO BILLINGTYPE_amk VALUES ('WC','Worker''s Comp')
+  9  	     INTO DOCTOR_amk VALUES (2,'Michael','Smith')
+ 10  	     INTO DOCTOR_amk VALUES (5,'Janice','May')
+ 11  	     INTO DOCTOR_amk VALUES (3,'Ray','Schultz')
+ 12  	     INTO PATIENT_amk VALUES (101,'Wesley','Tanner','8175551193')
+ 13  	     INTO PATIENT_amk VALUES (100,'Breanna','Rhodes','2145559191')
+ 14  	     INTO PATIENT_amk VALUES (15,'Jeff','Miner','4695552301')
+ 15  	     INTO PATIENT_amk VALUES (77,'Kim','Jackson','8175554911')
+ 16  	     INTO PATIENT_amk VALUES (119,'Mary','Vaughn','8175552334')
+ 17  	     INTO PATIENT_amk VALUES (97,'Chris','Mancha','4695553340')
+ 18  	     INTO PATIENT_amk VALUES (28,'Renee','Walker','2145559285')
+ 19  	     INTO PATIENT_amk VALUES (105,'Johnny','Redmond','2145551084')
+ 20  	     INTO PATIENT_amk VALUES (84,'James','Clayton','2145559285')
+ 21  	     INTO PATIENT_amk VALUES (23,'Shelby','Day','8175551198')
+ 22  	     INTO BLOCK_amk VALUES ('L1','Level 1','10 Minutes')
+ 23  	     INTO BLOCK_amk VALUES ('L2','Level 2','15 Minutes')
+ 24  	     INTO BLOCK_amk VALUES ('L3','Level 3','20 Minutes')
+ 25  	     INTO BLOCK_amk VALUES ('L4','Level 4','30 Minutes')
+ 26  	     INTO STATUS_amk VALUES ('CM','Complete')
+ 27  	     INTO STATUS_amk VALUES ('CN','Confirmed')
+ 28  	     INTO STATUS_amk VALUES ('NC','Not Confirmed')
+ 29  	     INTO REASON_amk VALUES ('NP','New Patient')
+ 30  	     INTO REASON_amk VALUES ('GBP','General Back Pain')
+ 31  	     INTO REASON_amk VALUES ('PSF','Post-Surgery Follow Up')
+ 32  	     INTO REASON_amk VALUES ('SR','Suture Removal')
+ 33  	     INTO REASON_amk VALUES ('PT','Physical Therapy')
+ 34  	     INTO REASON_amk VALUES ('AI','Auto Injury')
+ 35  	     INTO APPOINTMENT_amk VALUES (101,'01-SEP-2018','9:00 AM',101,2,'I',323,'CM')
+ 36  	     INTO APPOINTMENT_amk VALUES (102,'01-SEP-2018','9:00 AM',100,5,'I',129,'CM')
+ 37  	     INTO APPOINTMENT_amk VALUES (103,'01-SEP-2018','9:30 AM',15,2,'SP',NULL,'CM')
+ 38  	     INTO APPOINTMENT_amk VALUES (104,'01-SEP-2018','9:40 AM',77,3,'WC',210,'CM')
+ 39  	     INTO APPOINTMENT_amk VALUES (105,'01-SEP-2018','9:45 AM',119,2,'I',129,'CM')
+ 40  	     INTO APPOINTMENT_amk VALUES (106,'01-SEP-2018','10:00 AM',97,3,'SP',NULL,'CN')
+ 41  	     INTO APPOINTMENT_amk VALUES (107,'01-SEP-2018','10:30 AM',28,3,'I',129,'CN')
+ 42  	     INTO APPOINTMENT_amk VALUES (108,'01-SEP-2018','10:30 AM',105,2,'I',323,'NC')
+ 43  	     INTO APPOINTMENT_amk VALUES (109,'01-SEP-2018','11:00 AM',84,5,'I',135,'CN')
+ 44  	     INTO APPOINTMENT_amk VALUES (110,'01-SEP-2018','11:15 AM',84,3,'I',135,'CN')
+ 45  	     INTO APPOINTMENT_amk VALUES (111,'01-SEP-2018','1:00 PM',23,3,'I',323,'NC')
+ 46  	     INTO APPTDETAIL_amk VALUES  (101,'NP','L1')
+ 47  	     INTO APPTDETAIL_amk VALUES  (101,'GBP','L2')
+ 48  	     INTO APPTDETAIL_amk VALUES  (102,'PSF','L1')
+ 49  	     INTO APPTDETAIL_amk VALUES  (102,'SR','L1')
+ 50  	     INTO APPTDETAIL_amk VALUES  (103,'PSF','L1')
+ 51  	     INTO APPTDETAIL_amk VALUES  (104,'PT','L3')
+ 52  	     INTO APPTDETAIL_amk VALUES  (105,'NP','L1')
+ 53  	     INTO APPTDETAIL_amk VALUES  (105,'AI','L2')
+ 54  	     INTO APPTDETAIL_amk VALUES  (106,'PT','L4')
+ 55  	     INTO APPTDETAIL_amk VALUES  (107,'PT','L3')
+ 56  	     INTO APPTDETAIL_amk VALUES  (108,'GBP','L2')
+ 57  	     INTO APPTDETAIL_amk VALUES  (109,'PSF','L1')
+ 58  	     INTO APPTDETAIL_amk VALUES  (110,'PT','L4')
+ 59  	     INTO APPTDETAIL_amk VALUES  (111,'PT','L4')
+ 60  SELECT * FROM dual;
+
+58 rows created.
+
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> --PART IIb. Retrieve Data
+SQL> 
+SQL> SELECT * FROM INSCO_amk;
+
+   INSCOID INSCONAME                                                            
+---------- --------------------                                                 
+       323 Humana                                                               
+       129 Blue Cross                                                           
+       210 State Farm                                                           
+       135 TriCare                                                              
+
+SQL> SELECT * FROM BILLINGTYPE_amk;
+
+BI BILLINGTYPEDESC                                                              
+-- --------------------                                                         
+I  Insurance                                                                    
+SP Self Pay                                                                     
+WC Worker's Comp                                                                
+
+SQL> SELECT * FROM DOCTOR_amk;
+
+  DOCTORID DOCTORFNAME          DOCTORLNAME                                     
+---------- -------------------- --------------------                            
+         2 Michael              Smith                                           
+         5 Janice               May                                             
+         3 Ray                  Schultz                                         
+
+SQL> SELECT * FROM PATIENT_amk;
+
+ PATIENTID PATIENTFNAME         PATIENTLNAME         PATIENTPHO                 
+---------- -------------------- -------------------- ----------                 
+       101 Wesley               Tanner               8175551193                 
+       100 Breanna              Rhodes               2145559191                 
+        15 Jeff                 Miner                4695552301                 
+        77 Kim                  Jackson              8175554911                 
+       119 Mary                 Vaughn               8175552334                 
+        97 Chris                Mancha               4695553340                 
+        28 Renee                Walker               2145559285                 
+       105 Johnny               Redmond              2145551084                 
+        84 James                Clayton              2145559285                 
+        23 Shelby               Day                  8175551198                 
+
+10 rows selected.
+
+SQL> SELECT * FROM BLOCK_amk;
+
+BL BLOCKDESC  BLOCKTIME                                                         
+-- ---------- ----------                                                        
+L1 Level 1    10 Minutes                                                        
+L2 Level 2    15 Minutes                                                        
+L3 Level 3    20 Minutes                                                        
+L4 Level 4    30 Minutes                                                        
+
+SQL> SELECT * FROM STATUS_amk;
+
+AP APPTSTATUSDESC                                                               
+-- --------------------                                                         
+CM Complete                                                                     
+CN Confirmed                                                                    
+NC Not Confirmed                                                                
+
+SQL> SELECT * FROM REASON_amk;
+
+APP APPTREASONDESC                                                              
+--- ------------------------------                                              
+NP  New Patient                                                                 
+GBP General Back Pain                                                           
+PSF Post-Surgery Follow Up                                                      
+SR  Suture Removal                                                              
+PT  Physical Therapy                                                            
+AI  Auto Injury                                                                 
+
+6 rows selected.
+
+SQL> SELECT * FROM APPOINTMENT_amk;
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BI    INSCOID AP          
+---------- --------- ---------- ---------- ---------- -- ---------- --          
+       101 01-SEP-18 9:00 AM           101          2 I         323 CM          
+       102 01-SEP-18 9:00 AM           100          5 I         129 CM          
+       103 01-SEP-18 9:30 AM            15          2 SP            CM          
+       104 01-SEP-18 9:40 AM            77          3 WC        210 CM          
+       105 01-SEP-18 9:45 AM           119          2 I         129 CM          
+       106 01-SEP-18 10:00 AM           97          3 SP            CN          
+       107 01-SEP-18 10:30 AM           28          3 I         129 CN          
+       108 01-SEP-18 10:30 AM          105          2 I         323 NC          
+       109 01-SEP-18 11:00 AM           84          5 I         135 CN          
+       110 01-SEP-18 11:15 AM           84          3 I         135 CN          
+       111 01-SEP-18 1:00 PM            23          3 I         323 NC          
+
+11 rows selected.
+
+SQL> SELECT * FROM APPTDETAIL_amk;
+
+    APPTID APP BL                                                               
+---------- --- --                                                               
+       101 NP  L1                                                               
+       101 GBP L2                                                               
+       102 PSF L1                                                               
+       102 SR  L1                                                               
+       103 PSF L1                                                               
+       104 PT  L3                                                               
+       105 NP  L1                                                               
+       105 AI  L2                                                               
+       106 PT  L4                                                               
+       107 PT  L3                                                               
+       108 GBP L2                                                               
+
+    APPTID APP BL                                                               
+---------- --- --                                                               
+       109 PSF L1                                                               
+       110 PT  L4                                                               
+       111 PT  L4                                                               
+
+14 rows selected.
+
+SQL> 
+SQL> --PART III. Make changes
+SQL> 
+SQL> UPDATE PATIENT_amk
+  2  	     SET PatientPhone = '2145551234'
+  3  	     WHERE PatientID = 15;
+
+1 row updated.
+
+SQL> 
+SQL> INSERT INTO PATIENT_amk
+  2  	     VALUES (120,'Amanda','Green',NULL);
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO BLOCK_amk
+  2  	     VALUES ('L5','Level 5','45 minutes');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO REASON_amk
+  2  	     VALUES ('CSW','Complete Spinal Workup');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO INSCO_amk
+  2  	     VALUES (324,'Cigna');
+
+1 row created.
+
+SQL> 
+SQL> UPDATE APPOINTMENT_amk
+  2  	     SET ApptDate = '02-SEP-2018'
+  3  	     WHERE ApptID = 109 OR ApptID = 110 OR ApptID = 111;
+
+3 rows updated.
+
+SQL> 
+SQL> INSERT INTO APPOINTMENT_amk
+  2  VALUES (112,'03-SEP-2018','10:30 AM',120,2,'WC',324,'NC');
+
+1 row created.
+
+SQL> 
+SQL> INSERT ALL
+  2  	     INTO APPTDETAIL_amk VALUES (112,'NP','L1')
+  3  	     INTO APPTDETAIL_amk VALUES (112,'CSW','L5')
+  4  SELECT * FROM dual;
+
+2 rows created.
+
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> --PART IV. Sorted Select
+SQL> 
+SQL> SELECT * FROM INSCO_amk
+  2  	     ORDER BY InsCoID;
+
+   INSCOID INSCONAME                                                            
+---------- --------------------                                                 
+       129 Blue Cross                                                           
+       135 TriCare                                                              
+       210 State Farm                                                           
+       323 Humana                                                               
+       324 Cigna                                                                
+
+SQL> SELECT * FROM BILLINGTYPE_amk
+  2  	     ORDER BY BillingType;
+
+BI BILLINGTYPEDESC                                                              
+-- --------------------                                                         
+I  Insurance                                                                    
+SP Self Pay                                                                     
+WC Worker's Comp                                                                
+
+SQL> SELECT * FROM DOCTOR_amk
+  2  	     ORDER BY DoctorID;
+
+  DOCTORID DOCTORFNAME          DOCTORLNAME                                     
+---------- -------------------- --------------------                            
+         2 Michael              Smith                                           
+         3 Ray                  Schultz                                         
+         5 Janice               May                                             
+
+SQL> SELECT * FROM PATIENT_amk
+  2  	     ORDER BY PatientID;
+
+ PATIENTID PATIENTFNAME         PATIENTLNAME         PATIENTPHO                 
+---------- -------------------- -------------------- ----------                 
+        15 Jeff                 Miner                2145551234                 
+        23 Shelby               Day                  8175551198                 
+        28 Renee                Walker               2145559285                 
+        77 Kim                  Jackson              8175554911                 
+        84 James                Clayton              2145559285                 
+        97 Chris                Mancha               4695553340                 
+       100 Breanna              Rhodes               2145559191                 
+       101 Wesley               Tanner               8175551193                 
+       105 Johnny               Redmond              2145551084                 
+       119 Mary                 Vaughn               8175552334                 
+       120 Amanda               Green                                           
+
+11 rows selected.
+
+SQL> SELECT * FROM BLOCK_amk
+  2  	     ORDER BY BlockCode;
+
+BL BLOCKDESC  BLOCKTIME                                                         
+-- ---------- ----------                                                        
+L1 Level 1    10 Minutes                                                        
+L2 Level 2    15 Minutes                                                        
+L3 Level 3    20 Minutes                                                        
+L4 Level 4    30 Minutes                                                        
+L5 Level 5    45 minutes                                                        
+
+SQL> SELECT * FROM STATUS_amk
+  2  	     ORDER BY ApptStatusCode;
+
+AP APPTSTATUSDESC                                                               
+-- --------------------                                                         
+CM Complete                                                                     
+CN Confirmed                                                                    
+NC Not Confirmed                                                                
+
+SQL> SELECT * FROM REASON_amk
+  2  	     ORDER BY ApptReasonCode;
+
+APP APPTREASONDESC                                                              
+--- ------------------------------                                              
+AI  Auto Injury                                                                 
+CSW Complete Spinal Workup                                                      
+GBP General Back Pain                                                           
+NP  New Patient                                                                 
+PSF Post-Surgery Follow Up                                                      
+PT  Physical Therapy                                                            
+SR  Suture Removal                                                              
+
+7 rows selected.
+
+SQL> SELECT * FROM APPOINTMENT_amk
+  2  	     ORDER BY ApptID;
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BI    INSCOID AP          
+---------- --------- ---------- ---------- ---------- -- ---------- --          
+       101 01-SEP-18 9:00 AM           101          2 I         323 CM          
+       102 01-SEP-18 9:00 AM           100          5 I         129 CM          
+       103 01-SEP-18 9:30 AM            15          2 SP            CM          
+       104 01-SEP-18 9:40 AM            77          3 WC        210 CM          
+       105 01-SEP-18 9:45 AM           119          2 I         129 CM          
+       106 01-SEP-18 10:00 AM           97          3 SP            CN          
+       107 01-SEP-18 10:30 AM           28          3 I         129 CN          
+       108 01-SEP-18 10:30 AM          105          2 I         323 NC          
+       109 02-SEP-18 11:00 AM           84          5 I         135 CN          
+       110 02-SEP-18 11:15 AM           84          3 I         135 CN          
+       111 02-SEP-18 1:00 PM            23          3 I         323 NC          
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BI    INSCOID AP          
+---------- --------- ---------- ---------- ---------- -- ---------- --          
+       112 03-SEP-18 10:30 AM          120          2 WC        324 NC          
+
+12 rows selected.
+
+SQL> SELECT * FROM APPTDETAIL_amk
+  2  	     ORDER BY ApptID, ApptReasonCode;
+
+    APPTID APP BL                                                               
+---------- --- --                                                               
+       101 GBP L2                                                               
+       101 NP  L1                                                               
+       102 PSF L1                                                               
+       102 SR  L1                                                               
+       103 PSF L1                                                               
+       104 PT  L3                                                               
+       105 AI  L2                                                               
+       105 NP  L1                                                               
+       106 PT  L4                                                               
+       107 PT  L3                                                               
+       108 GBP L2                                                               
+
+    APPTID APP BL                                                               
+---------- --- --                                                               
+       109 PSF L1                                                               
+       110 PT  L4                                                               
+       111 PT  L4                                                               
+       112 CSW L5                                                               
+       112 NP  L1                                                               
+
+16 rows selected.
+
+SQL> 
+SQL> spool off

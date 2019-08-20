@@ -1,0 +1,1153 @@
+SQL> 
+SQL> -Project 3 formating
+SP2-0734: unknown command beginning "-Project 3..." - rest of line ignored.
+SQL> --#1 Show headings in entirety
+SQL> COLUMN PatientPhone FORMAT a12
+SQL> COLUMN Billingtype FORMAT a11
+SQL> COLUMN BlockCode FORMAT a9
+SQL> COLUMN ApptStatusCode FORMAT a14
+SQL> COLUMN ApptReasonCode FORMAT a14
+SQL> COLUMN ReasonCode FORMAT a10
+SQL> COLUMN PayType FORMAT a7
+SQL> COLUMN Description FORMAT a13
+SQL> COLUMN "Pay Type" FORMAT a8
+SQL> COLUMN "Block Code" FORMAT a10
+SQL> COLUMN "Reason Code" FORMAT a11
+SQL> COLUMN "Description" FORMAT a22
+SQL> 
+SQL> --#2 Setting line size to 120
+SQL> SET LINESIZE 120
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Project 2 Tables
+SQL> 
+SQL> --drop tables
+SQL> DROP TABLE APPTDETAIL_amk;
+
+Table dropped.
+
+SQL> DROP TABLE APPOINTMENT_amk;
+
+Table dropped.
+
+SQL> DROP TABLE REASON_amk;
+
+Table dropped.
+
+SQL> DROP TABLE STATUS_amk;
+
+Table dropped.
+
+SQL> DROP TABLE BLOCK_amk;
+
+Table dropped.
+
+SQL> DROP TABLE PATIENT_amk;
+
+Table dropped.
+
+SQL> DROP TABLE DOCTOR_amk;
+
+Table dropped.
+
+SQL> DROP TABLE BILLINGTYPE_amk;
+
+Table dropped.
+
+SQL> DROP TABLE INSCO_amk;
+
+Table dropped.
+
+SQL> 
+SQL> --Part Ia. Create Tables
+SQL> 
+SQL> CREATE TABLE INSCO_amk (
+  2  InsCoID	     NUMBER(3),
+  3  InsCoName	     VARCHAR(20),
+  4  PRIMARY KEY (InsCoID)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE BILLINGTYPE_amk (
+  2  Billingtype	     VARCHAR(2),
+  3  BillingTypeDesc VARCHAR(20)     NOT NULL,
+  4  PRIMARY KEY (BillingType)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE DOCTOR_amk (
+  2  DoctorID		     NUMBER(1),
+  3  DoctorFName     VARCHAR(20)     NOT NULL,
+  4  DoctorLName     VARCHAR(20)     NOT NULL,
+  5  PRIMARY KEY (DoctorID)
+  6  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE PATIENT_amk (
+  2  PatientID		     NUMBER(3),
+  3  PatientFName    VARCHAR(20)     NOT NULL,
+  4  PatientLName    VARCHAR(20)     NOT NULL,
+  5  PatientPhone    VARCHAR(10),
+  6  PRIMARY KEY (PatientID)
+  7  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE BLOCK_amk (
+  2  BlockCode	     CHAR(2),
+  3  BlockDesc	     VARCHAR(10)     NOT NULL,
+  4  BlockTime		     VARCHAR(10)     NOT NULL,
+  5  PRIMARY KEY (BlockCode)
+  6  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE STATUS_amk (
+  2  ApptStatusCode  CHAR(2),
+  3  ApptStatusDesc  VARCHAR(20)     NOT NULL,
+  4  PRIMARY KEY (ApptStatusCode)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE REASON_amk (
+  2  ApptReasonCode  VARCHAR(3),
+  3  ApptReasonDesc  VARCHAR(30)     NOT NULL,
+  4  PRIMARY KEY (ApptReasonCode)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE APPOINTMENT_amk (
+  2  ApptID	     NUMBER(3),
+  3  ApptDate		     DATE	     NOT NULL,
+  4  ApptTime		     VARCHAR(10)     NOT NULL,
+  5  PatientID		     NUMBER(3)	     NOT NULL,
+  6  DoctorID		     NUMBER(1)	     NOT NULL,
+  7  BillingType     VARCHAR(2)      NOT NULL,
+  8  InsCoID	     NUMBER(3),
+  9  ApptStatusCode  CHAR(2)	     NOT NULL,
+ 10  PRIMARY KEY (ApptID),
+ 11  FOREIGN KEY (InsCoID) REFERENCES INSCO_amk,
+ 12  FOREIGN KEY (BillingType) REFERENCES BILLINGTYPE_amk,
+ 13  FOREIGN KEY (DoctorID) REFERENCES DOCTOR_amk,
+ 14  FOREIGN KEY (PatientID) REFERENCES PATIENT_amk,
+ 15  FOREIGN KEY (ApptStatusCode) REFERENCES STATUS_amk
+ 16  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE APPTDETAIL_amk (
+  2  ApptID	     NUMBER(3),
+  3  ApptReasonCode  VARCHAR(3),
+  4  BlockCode	     CHAR(2)	     NOT NULL,
+  5  PRIMARY KEY (ApptID, ApptReasonCode),
+  6  FOREIGN KEY (BlockCode) REFERENCES BLOCK_amk
+  7  );
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> --Part Ib. Describe Tables
+SQL> 
+SQL> DESCRIBE INSCO_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ INSCOID                                                           NOT NULL NUMBER(3)
+ INSCONAME                                                                  VARCHAR2(20)
+
+SQL> DESCRIBE BILLINGTYPE_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ BILLINGTYPE                                                       NOT NULL VARCHAR2(2)
+ BILLINGTYPEDESC                                                   NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE DOCTOR_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ DOCTORID                                                          NOT NULL NUMBER(1)
+ DOCTORFNAME                                                       NOT NULL VARCHAR2(20)
+ DOCTORLNAME                                                       NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE PATIENT_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ PATIENTID                                                         NOT NULL NUMBER(3)
+ PATIENTFNAME                                                      NOT NULL VARCHAR2(20)
+ PATIENTLNAME                                                      NOT NULL VARCHAR2(20)
+ PATIENTPHONE                                                               VARCHAR2(10)
+
+SQL> DESCRIBE BLOCK_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ BLOCKCODE                                                         NOT NULL CHAR(2)
+ BLOCKDESC                                                         NOT NULL VARCHAR2(10)
+ BLOCKTIME                                                         NOT NULL VARCHAR2(10)
+
+SQL> DESCRIBE STATUS_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ APPTSTATUSCODE                                                    NOT NULL CHAR(2)
+ APPTSTATUSDESC                                                    NOT NULL VARCHAR2(20)
+
+SQL> DESCRIBE REASON_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ APPTREASONCODE                                                    NOT NULL VARCHAR2(3)
+ APPTREASONDESC                                                    NOT NULL VARCHAR2(30)
+
+SQL> DESCRIBE APPOINTMENT_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ APPTID                                                            NOT NULL NUMBER(3)
+ APPTDATE                                                          NOT NULL DATE
+ APPTTIME                                                          NOT NULL VARCHAR2(10)
+ PATIENTID                                                         NOT NULL NUMBER(3)
+ DOCTORID                                                          NOT NULL NUMBER(1)
+ BILLINGTYPE                                                       NOT NULL VARCHAR2(2)
+ INSCOID                                                                    NUMBER(3)
+ APPTSTATUSCODE                                                    NOT NULL CHAR(2)
+
+SQL> DESCRIBE APPTDETAIL_amk
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ APPTID                                                            NOT NULL NUMBER(3)
+ APPTREASONCODE                                                    NOT NULL VARCHAR2(3)
+ BLOCKCODE                                                         NOT NULL CHAR(2)
+
+SQL> 
+SQL> --Part II. Insert Data
+SQL> 
+SQL> INSERT ALL
+  2  	     INTO INSCO_amk VALUES (323,'Humana')
+  3  	     INTO INSCO_amk VALUES (129,'Blue Cross')
+  4  	     INTO INSCO_amk VALUES (210,'State Farm')
+  5  	     INTO INSCO_amk VALUES (135,'TriCare')
+  6  	     INTO BILLINGTYPE_amk VALUES ('I','Insurance')
+  7  	     INTO BILLINGTYPE_amk VALUES ('SP','Self Pay')
+  8  	     INTO BILLINGTYPE_amk VALUES ('WC','Worker''s Comp')
+  9  	     INTO DOCTOR_amk VALUES (2,'Michael','Smith')
+ 10  	     INTO DOCTOR_amk VALUES (5,'Janice','May')
+ 11  	     INTO DOCTOR_amk VALUES (3,'Ray','Schultz')
+ 12  	     INTO PATIENT_amk VALUES (101,'Wesley','Tanner','8175551193')
+ 13  	     INTO PATIENT_amk VALUES (100,'Breanna','Rhodes','2145559191')
+ 14  	     INTO PATIENT_amk VALUES (15,'Jeff','Miner','4695552301')
+ 15  	     INTO PATIENT_amk VALUES (77,'Kim','Jackson','8175554911')
+ 16  	     INTO PATIENT_amk VALUES (119,'Mary','Vaughn','8175552334')
+ 17  	     INTO PATIENT_amk VALUES (97,'Chris','Mancha','4695553340')
+ 18  	     INTO PATIENT_amk VALUES (28,'Renee','Walker','2145559285')
+ 19  	     INTO PATIENT_amk VALUES (105,'Johnny','Redmond','2145551084')
+ 20  	     INTO PATIENT_amk VALUES (84,'James','Clayton','2145559285')
+ 21  	     INTO PATIENT_amk VALUES (23,'Shelby','Day','8175551198')
+ 22  	     INTO BLOCK_amk VALUES ('L1','Level 1','10 Minutes')
+ 23  	     INTO BLOCK_amk VALUES ('L2','Level 2','15 Minutes')
+ 24  	     INTO BLOCK_amk VALUES ('L3','Level 3','20 Minutes')
+ 25  	     INTO BLOCK_amk VALUES ('L4','Level 4','30 Minutes')
+ 26  	     INTO STATUS_amk VALUES ('CM','Complete')
+ 27  	     INTO STATUS_amk VALUES ('CN','Confirmed')
+ 28  	     INTO STATUS_amk VALUES ('NC','Not Confirmed')
+ 29  	     INTO REASON_amk VALUES ('NP','New Patient')
+ 30  	     INTO REASON_amk VALUES ('GBP','General Back Pain')
+ 31  	     INTO REASON_amk VALUES ('PSF','Post-Surgery Follow Up')
+ 32  	     INTO REASON_amk VALUES ('SR','Suture Removal')
+ 33  	     INTO REASON_amk VALUES ('PT','Physical Therapy')
+ 34  	     INTO REASON_amk VALUES ('AI','Auto Injury')
+ 35  	     INTO APPOINTMENT_amk VALUES (101,'01-SEP-2018','9:00 AM',101,2,'I',323,'CM')
+ 36  	     INTO APPOINTMENT_amk VALUES (102,'01-SEP-2018','9:00 AM',100,5,'I',129,'CM')
+ 37  	     INTO APPOINTMENT_amk VALUES (103,'01-SEP-2018','9:30 AM',15,2,'SP',NULL,'CM')
+ 38  	     INTO APPOINTMENT_amk VALUES (104,'01-SEP-2018','9:40 AM',77,3,'WC',210,'CM')
+ 39  	     INTO APPOINTMENT_amk VALUES (105,'01-SEP-2018','9:45 AM',119,2,'I',129,'CM')
+ 40  	     INTO APPOINTMENT_amk VALUES (106,'01-SEP-2018','10:00 AM',97,3,'SP',NULL,'CN')
+ 41  	     INTO APPOINTMENT_amk VALUES (107,'01-SEP-2018','10:30 AM',28,3,'I',129,'CN')
+ 42  	     INTO APPOINTMENT_amk VALUES (108,'01-SEP-2018','10:30 AM',105,2,'I',323,'NC')
+ 43  	     INTO APPOINTMENT_amk VALUES (109,'01-SEP-2018','11:00 AM',84,5,'I',135,'CN')
+ 44  	     INTO APPOINTMENT_amk VALUES (110,'01-SEP-2018','11:15 AM',84,3,'I',135,'CN')
+ 45  	     INTO APPOINTMENT_amk VALUES (111,'01-SEP-2018','1:00 PM',23,3,'I',323,'NC')
+ 46  	     INTO APPTDETAIL_amk VALUES  (101,'NP','L1')
+ 47  	     INTO APPTDETAIL_amk VALUES  (101,'GBP','L2')
+ 48  	     INTO APPTDETAIL_amk VALUES  (102,'PSF','L1')
+ 49  	     INTO APPTDETAIL_amk VALUES  (102,'SR','L1')
+ 50  	     INTO APPTDETAIL_amk VALUES  (103,'PSF','L1')
+ 51  	     INTO APPTDETAIL_amk VALUES  (104,'PT','L3')
+ 52  	     INTO APPTDETAIL_amk VALUES  (105,'NP','L1')
+ 53  	     INTO APPTDETAIL_amk VALUES  (105,'AI','L2')
+ 54  	     INTO APPTDETAIL_amk VALUES  (106,'PT','L4')
+ 55  	     INTO APPTDETAIL_amk VALUES  (107,'PT','L3')
+ 56  	     INTO APPTDETAIL_amk VALUES  (108,'GBP','L2')
+ 57  	     INTO APPTDETAIL_amk VALUES  (109,'PSF','L1')
+ 58  	     INTO APPTDETAIL_amk VALUES  (110,'PT','L4')
+ 59  	     INTO APPTDETAIL_amk VALUES  (111,'PT','L4')
+ 60  SELECT * FROM dual;
+
+58 rows created.
+
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> --PART IIb. Retrieve Data
+SQL> 
+SQL> 
+SQL> SELECT * FROM INSCO_amk;
+
+   INSCOID INSCONAME                                                                                                    
+---------- --------------------                                                                                         
+       323 Humana                                                                                                       
+       129 Blue Cross                                                                                                   
+       210 State Farm                                                                                                   
+       135 TriCare                                                                                                      
+
+SQL> SELECT * FROM BILLINGTYPE_amk;
+
+BILLINGTYPE BILLINGTYPEDESC                                                                                             
+----------- --------------------                                                                                        
+I           Insurance                                                                                                   
+SP          Self Pay                                                                                                    
+WC          Worker's Comp                                                                                               
+
+SQL> SELECT * FROM DOCTOR_amk;
+
+  DOCTORID DOCTORFNAME          DOCTORLNAME                                                                             
+---------- -------------------- --------------------                                                                    
+         2 Michael              Smith                                                                                   
+         5 Janice               May                                                                                     
+         3 Ray                  Schultz                                                                                 
+
+SQL> SELECT * FROM PATIENT_amk;
+
+ PATIENTID PATIENTFNAME         PATIENTLNAME         PATIENTPHONE                                                       
+---------- -------------------- -------------------- ------------                                                       
+       101 Wesley               Tanner               8175551193                                                         
+       100 Breanna              Rhodes               2145559191                                                         
+        15 Jeff                 Miner                4695552301                                                         
+        77 Kim                  Jackson              8175554911                                                         
+       119 Mary                 Vaughn               8175552334                                                         
+        97 Chris                Mancha               4695553340                                                         
+        28 Renee                Walker               2145559285                                                         
+       105 Johnny               Redmond              2145551084                                                         
+        84 James                Clayton              2145559285                                                         
+        23 Shelby               Day                  8175551198                                                         
+
+10 rows selected.
+
+SQL> SELECT * FROM BLOCK_amk;
+
+BLOCKCODE BLOCKDESC  BLOCKTIME                                                                                          
+--------- ---------- ----------                                                                                         
+L1        Level 1    10 Minutes                                                                                         
+L2        Level 2    15 Minutes                                                                                         
+L3        Level 3    20 Minutes                                                                                         
+L4        Level 4    30 Minutes                                                                                         
+
+SQL> SELECT * FROM STATUS_amk;
+
+APPTSTATUSCODE APPTSTATUSDESC                                                                                           
+-------------- --------------------                                                                                     
+CM             Complete                                                                                                 
+CN             Confirmed                                                                                                
+NC             Not Confirmed                                                                                            
+
+SQL> SELECT * FROM REASON_amk;
+
+APPTREASONCODE APPTREASONDESC                                                                                           
+-------------- ------------------------------                                                                           
+NP             New Patient                                                                                              
+GBP            General Back Pain                                                                                        
+PSF            Post-Surgery Follow Up                                                                                   
+SR             Suture Removal                                                                                           
+PT             Physical Therapy                                                                                         
+AI             Auto Injury                                                                                              
+
+6 rows selected.
+
+SQL> SELECT * FROM APPOINTMENT_amk;
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BILLINGTYPE    INSCOID APPTSTATUSCODE                             
+---------- --------- ---------- ---------- ---------- ----------- ---------- --------------                             
+       101 01-SEP-18 9:00 AM           101          2 I                  323 CM                                         
+       102 01-SEP-18 9:00 AM           100          5 I                  129 CM                                         
+       103 01-SEP-18 9:30 AM            15          2 SP                     CM                                         
+       104 01-SEP-18 9:40 AM            77          3 WC                 210 CM                                         
+       105 01-SEP-18 9:45 AM           119          2 I                  129 CM                                         
+       106 01-SEP-18 10:00 AM           97          3 SP                     CN                                         
+       107 01-SEP-18 10:30 AM           28          3 I                  129 CN                                         
+       108 01-SEP-18 10:30 AM          105          2 I                  323 NC                                         
+       109 01-SEP-18 11:00 AM           84          5 I                  135 CN                                         
+       110 01-SEP-18 11:15 AM           84          3 I                  135 CN                                         
+       111 01-SEP-18 1:00 PM            23          3 I                  323 NC                                         
+
+11 rows selected.
+
+SQL> SELECT * FROM APPTDETAIL_amk;
+
+    APPTID APPTREASONCODE BLOCKCODE                                                                                     
+---------- -------------- ---------                                                                                     
+       101 NP             L1                                                                                            
+       101 GBP            L2                                                                                            
+       102 PSF            L1                                                                                            
+       102 SR             L1                                                                                            
+       103 PSF            L1                                                                                            
+       104 PT             L3                                                                                            
+       105 NP             L1                                                                                            
+       105 AI             L2                                                                                            
+       106 PT             L4                                                                                            
+       107 PT             L3                                                                                            
+       108 GBP            L2                                                                                            
+
+    APPTID APPTREASONCODE BLOCKCODE                                                                                     
+---------- -------------- ---------                                                                                     
+       109 PSF            L1                                                                                            
+       110 PT             L4                                                                                            
+       111 PT             L4                                                                                            
+
+14 rows selected.
+
+SQL> 
+SQL> --PART III. Make changes
+SQL> 
+SQL> UPDATE PATIENT_amk
+  2  	     SET PatientPhone = '2145551234'
+  3  	     WHERE PatientID = 15;
+
+1 row updated.
+
+SQL> 
+SQL> INSERT INTO PATIENT_amk
+  2  	     VALUES (120,'Amanda','Green',NULL);
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO BLOCK_amk
+  2  	     VALUES ('L5','Level 5','45 minutes');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO REASON_amk
+  2  	     VALUES ('CSW','Complete Spinal Workup');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO INSCO_amk
+  2  	     VALUES (324,'Cigna');
+
+1 row created.
+
+SQL> 
+SQL> UPDATE APPOINTMENT_amk
+  2  	     SET ApptDate = '02-SEP-2018'
+  3  	     WHERE ApptID = 109 OR ApptID = 110 OR ApptID = 111;
+
+3 rows updated.
+
+SQL> 
+SQL> INSERT INTO APPOINTMENT_amk
+  2  	     VALUES (112,'03-SEP-2018','10:30 AM',120,2,'WC',324,'NC');
+
+1 row created.
+
+SQL> 
+SQL> INSERT ALL
+  2  	     INTO APPTDETAIL_amk VALUES (112,'NP','L1')
+  3  	     INTO APPTDETAIL_amk VALUES (112,'CSW','L5')
+  4  SELECT * FROM dual;
+
+2 rows created.
+
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> --PART IV. Sorted Select
+SQL> 
+SQL> SELECT * FROM INSCO_amk
+  2  	     ORDER BY InsCoID;
+
+   INSCOID INSCONAME                                                                                                    
+---------- --------------------                                                                                         
+       129 Blue Cross                                                                                                   
+       135 TriCare                                                                                                      
+       210 State Farm                                                                                                   
+       323 Humana                                                                                                       
+       324 Cigna                                                                                                        
+
+SQL> SELECT * FROM BILLINGTYPE_amk
+  2  	     ORDER BY BillingType;
+
+BILLINGTYPE BILLINGTYPEDESC                                                                                             
+----------- --------------------                                                                                        
+I           Insurance                                                                                                   
+SP          Self Pay                                                                                                    
+WC          Worker's Comp                                                                                               
+
+SQL> SELECT * FROM DOCTOR_amk
+  2  	     ORDER BY DoctorID;
+
+  DOCTORID DOCTORFNAME          DOCTORLNAME                                                                             
+---------- -------------------- --------------------                                                                    
+         2 Michael              Smith                                                                                   
+         3 Ray                  Schultz                                                                                 
+         5 Janice               May                                                                                     
+
+SQL> SELECT * FROM PATIENT_amk
+  2  	     ORDER BY PatientID;
+
+ PATIENTID PATIENTFNAME         PATIENTLNAME         PATIENTPHONE                                                       
+---------- -------------------- -------------------- ------------                                                       
+        15 Jeff                 Miner                2145551234                                                         
+        23 Shelby               Day                  8175551198                                                         
+        28 Renee                Walker               2145559285                                                         
+        77 Kim                  Jackson              8175554911                                                         
+        84 James                Clayton              2145559285                                                         
+        97 Chris                Mancha               4695553340                                                         
+       100 Breanna              Rhodes               2145559191                                                         
+       101 Wesley               Tanner               8175551193                                                         
+       105 Johnny               Redmond              2145551084                                                         
+       119 Mary                 Vaughn               8175552334                                                         
+       120 Amanda               Green                                                                                   
+
+11 rows selected.
+
+SQL> SELECT * FROM BLOCK_amk
+  2  	     ORDER BY BlockCode;
+
+BLOCKCODE BLOCKDESC  BLOCKTIME                                                                                          
+--------- ---------- ----------                                                                                         
+L1        Level 1    10 Minutes                                                                                         
+L2        Level 2    15 Minutes                                                                                         
+L3        Level 3    20 Minutes                                                                                         
+L4        Level 4    30 Minutes                                                                                         
+L5        Level 5    45 minutes                                                                                         
+
+SQL> SELECT * FROM STATUS_amk
+  2  	     ORDER BY ApptStatusCode;
+
+APPTSTATUSCODE APPTSTATUSDESC                                                                                           
+-------------- --------------------                                                                                     
+CM             Complete                                                                                                 
+CN             Confirmed                                                                                                
+NC             Not Confirmed                                                                                            
+
+SQL> SELECT * FROM REASON_amk
+  2  	     ORDER BY ApptReasonCode;
+
+APPTREASONCODE APPTREASONDESC                                                                                           
+-------------- ------------------------------                                                                           
+AI             Auto Injury                                                                                              
+CSW            Complete Spinal Workup                                                                                   
+GBP            General Back Pain                                                                                        
+NP             New Patient                                                                                              
+PSF            Post-Surgery Follow Up                                                                                   
+PT             Physical Therapy                                                                                         
+SR             Suture Removal                                                                                           
+
+7 rows selected.
+
+SQL> SELECT * FROM APPOINTMENT_amk
+  2  	     ORDER BY ApptID;
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BILLINGTYPE    INSCOID APPTSTATUSCODE                             
+---------- --------- ---------- ---------- ---------- ----------- ---------- --------------                             
+       101 01-SEP-18 9:00 AM           101          2 I                  323 CM                                         
+       102 01-SEP-18 9:00 AM           100          5 I                  129 CM                                         
+       103 01-SEP-18 9:30 AM            15          2 SP                     CM                                         
+       104 01-SEP-18 9:40 AM            77          3 WC                 210 CM                                         
+       105 01-SEP-18 9:45 AM           119          2 I                  129 CM                                         
+       106 01-SEP-18 10:00 AM           97          3 SP                     CN                                         
+       107 01-SEP-18 10:30 AM           28          3 I                  129 CN                                         
+       108 01-SEP-18 10:30 AM          105          2 I                  323 NC                                         
+       109 02-SEP-18 11:00 AM           84          5 I                  135 CN                                         
+       110 02-SEP-18 11:15 AM           84          3 I                  135 CN                                         
+       111 02-SEP-18 1:00 PM            23          3 I                  323 NC                                         
+
+    APPTID APPTDATE  APPTTIME    PATIENTID   DOCTORID BILLINGTYPE    INSCOID APPTSTATUSCODE                             
+---------- --------- ---------- ---------- ---------- ----------- ---------- --------------                             
+       112 03-SEP-18 10:30 AM          120          2 WC                 324 NC                                         
+
+12 rows selected.
+
+SQL> SELECT * FROM APPTDETAIL_amk
+  2  	     ORDER BY ApptID, ApptReasonCode;
+
+    APPTID APPTREASONCODE BLOCKCODE                                                                                     
+---------- -------------- ---------                                                                                     
+       101 GBP            L2                                                                                            
+       101 NP             L1                                                                                            
+       102 PSF            L1                                                                                            
+       102 SR             L1                                                                                            
+       103 PSF            L1                                                                                            
+       104 PT             L3                                                                                            
+       105 AI             L2                                                                                            
+       105 NP             L1                                                                                            
+       106 PT             L4                                                                                            
+       107 PT             L3                                                                                            
+       108 GBP            L2                                                                                            
+
+    APPTID APPTREASONCODE BLOCKCODE                                                                                     
+---------- -------------- ---------                                                                                     
+       109 PSF            L1                                                                                            
+       110 PT             L4                                                                                            
+       111 PT             L4                                                                                            
+       112 CSW            L5                                                                                            
+       112 NP             L1                                                                                            
+
+16 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> --Project 3 steps
+SQL> 
+SQL> --#4 Drop BlockTime and add new BlockMinutes and update each row
+SQL> ALTER TABLE BLOCK_amk
+  2  DROP COLUMN BlockTime;
+
+Table altered.
+
+SQL> 
+SQL> ALTER TABLE BLOCK_amk
+  2  	     ADD BlockMinutes Number(3);
+
+Table altered.
+
+SQL> 
+SQL> UPDATE BLOCK_amk
+  2  	     SET BlockMinutes = 10
+  3  	     WHERE BlockCode = 'L1';
+
+1 row updated.
+
+SQL> 
+SQL> UPDATE BLOCK_amk
+  2  	     SET BlockMinutes = 15
+  3  	     WHERE BlockCode = 'L2';
+
+1 row updated.
+
+SQL> 
+SQL> UPDATE BLOCK_amk
+  2  	     SET BlockMinutes = 20
+  3  	     WHERE BlockCode = 'L3';
+
+1 row updated.
+
+SQL> 
+SQL> UPDATE BLOCK_amk
+  2  	     SET BlockMinutes = 30
+  3  	     WHERE BlockCode = 'L4';
+
+1 row updated.
+
+SQL> 
+SQL> UPDATE BLOCK_amk
+  2  	     SET BlockMinutes = 45
+  3  	     WHERE BlockCode = 'L5';
+
+1 row updated.
+
+SQL> 
+SQL> 
+SQL> --#5 Add new appt by generating ApptID and apptdetails
+SQL> INSERT INTO APPOINTMENT_amk
+  2  	     VALUES ((SELECT MAX(ApptID) + 1 FROM APPOINTMENT_amk),'03-SEP-2018','11:00 AM',15,2,'SP',NULL,'CN');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO APPTDETAIL_amk
+  2  	     VALUES ((SELECT MAX(ApptID) + 1 FROM APPTDETAIL_amk),'PSF','L2');
+
+1 row created.
+
+SQL> 
+SQL> --#6 add new Appointment to appointment and apptdetails
+SQL> INSERT INTO APPOINTMENT_amk
+  2  	     VALUES ((SELECT MAX(ApptID) + 1 FROM APPOINTMENT_amk),'04-SEP-2018','09:00 AM',101,3,'I',323,'NC');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO APPTDETAIL_amk
+  2  	     VALUES ((SELECT MAX(ApptID) + 1 FROM APPTDETAIL_amk),'PT','L4');
+
+1 row created.
+
+SQL> 
+SQL> --#7 Add new appt status
+SQL> INSERT INTO STATUS_amk
+  2  	     VALUES ('CX','Cancelled');
+
+1 row created.
+
+SQL> 
+SQL> --#8 Update apptstatus for 108
+SQL> UPDATE APPOINTMENT_amk
+  2  	     SET ApptStatusCode = 'CX'
+  3  	     WHERE ApptID = 108;
+
+1 row updated.
+
+SQL> 
+SQL> --#9 Commit
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> --#10 List patient with no number
+SQL> SELECT PatientID, PatientFName, PatientLName
+  2  	     FROM PATIENT_amk
+  3  	     WHERE PatientPhone IS NULL;
+
+ PATIENTID PATIENTFNAME         PATIENTLNAME                                                                            
+---------- -------------------- --------------------                                                                    
+       120 Amanda               Green                                                                                   
+
+SQL> 
+SQL> --#11 list the count of unique insurance companies
+SQL> SELECT COUNT(DISTINCT InsCoID) AS "Insurance Co Count" FROM APPOINTMENT_amk;
+
+Insurance Co Count                                                                                                      
+------------------                                                                                                      
+                 5                                                                                                      
+
+SQL> 
+SQL> --#12 Count appt per reason code
+SQL> SELECT ApptReasonCode AS ReasonCode, COUNT(ApptID) AS ApptCount
+  2  	     FROM APPTDETAIL_amk
+  3  	     GROUP BY ApptReasonCode;
+
+REASONCODE  APPTCOUNT                                                                                                   
+---------- ----------                                                                                                   
+SR                  1                                                                                                   
+CSW                 1                                                                                                   
+NP                  3                                                                                                   
+PSF                 4                                                                                                   
+GBP                 2                                                                                                   
+PT                  6                                                                                                   
+AI                  1                                                                                                   
+
+7 rows selected.
+
+SQL> 
+SQL> --#13 List paytype and count appt per type
+SQL> SELECT BillingType AS PayType, COUNT(ApptID) AS PayCount
+  2  	     FROM APPOINTMENT_amk
+  3  	     GROUP BY BillingType;
+
+PAYTYPE   PAYCOUNT                                                                                                      
+------- ----------                                                                                                      
+SP               3                                                                                                      
+WC               2                                                                                                      
+I                9                                                                                                      
+
+SQL> 
+SQL> --#14 list all appt detail columns in order
+SQL> SELECT ApptID, ApptReasonCode AS ReasonCode, BlockCode
+  2  	     FROM APPTDETAIL_amk
+  3  	     ORDER BY ApptID, ReasonCode;
+
+    APPTID REASONCODE BLOCKCODE                                                                                         
+---------- ---------- ---------                                                                                         
+       101 GBP        L2                                                                                                
+       101 NP         L1                                                                                                
+       102 PSF        L1                                                                                                
+       102 SR         L1                                                                                                
+       103 PSF        L1                                                                                                
+       104 PT         L3                                                                                                
+       105 AI         L2                                                                                                
+       105 NP         L1                                                                                                
+       106 PT         L4                                                                                                
+       107 PT         L3                                                                                                
+       108 GBP        L2                                                                                                
+
+    APPTID REASONCODE BLOCKCODE                                                                                         
+---------- ---------- ---------                                                                                         
+       109 PSF        L1                                                                                                
+       110 PT         L4                                                                                                
+       111 PT         L4                                                                                                
+       112 CSW        L5                                                                                                
+       112 NP         L1                                                                                                
+       113 PSF        L2                                                                                                
+       114 PT         L4                                                                                                
+
+18 rows selected.
+
+SQL> 
+SQL> #15 List avg of minutes for rows in appt detail
+SQL> SELECT CONCAT(AVG(BlockMinutes), ' Minutes')
+  2  	     AS "Avg Appt Time"
+  3  	     FROM APPTDETAIL_amk
+  4  	     JOIN BLOCK_amk ON APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode;
+
+Avg Appt Time                                                                                                           
+------------------------------------------------                                                                        
+18.6111111111111111111111111111111111111 Minutes                                                                        
+
+SQL> 
+SQL> --#16 list appt id, date, pat id, pat last name, doc id, doc last name, appt status desc for all appt on or after 9/2/18. format date as mm/dd/yy
+SQL> SELECT ApptID AS "Appt ID", TO_CHAR(ApptDate, 'mm/dd/yy') AS "Date", APPOINTMENT_amk.PatientID AS "Patient ID", PATIENT_amk.PatientLName AS "Patient Last Name", APPOINTMENT_amk.DoctorID AS "Doctor ID", DOCTOR_amk.DoctorLName AS "Doctor Last Name", STATUS_amk.ApptStatusDesc AS "Appt Status Desc"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, DOCTOR_amk, STATUS_amk
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.DoctorID = DOCTOR_amk.DoctorID
+  5  	     AND APPOINTMENT_amk.ApptStatusCode = STATUS_amk.ApptStatusCode
+  6  	     AND ApptDate >= '02-SEP-2018';
+
+   Appt ID Date     Patient ID Patient Last Name     Doctor ID Doctor Last Name     Appt Status Desc                    
+---------- -------- ---------- -------------------- ---------- -------------------- --------------------                
+       114 09/04/18        101 Tanner                        3 Schultz              Not Confirmed                       
+       113 09/03/18         15 Miner                         2 Smith                Confirmed                           
+       109 09/02/18         84 Clayton                       5 May                  Confirmed                           
+       110 09/02/18         84 Clayton                       3 Schultz              Confirmed                           
+       111 09/02/18         23 Day                           3 Schultz              Not Confirmed                       
+       112 09/03/18        120 Green                         2 Smith                Not Confirmed                       
+
+6 rows selected.
+
+SQL> 
+SQL> --#17
+SQL> SELECT APPOINTMENT_amk.ApptID AS "Appt ID", ApptDate AS "Date", ApptTime AS "Time", BLOCK_amk.BlockMinutes AS "Total Minutes"
+  2  	     FROM APPOINTMENT_amk, BLOCK_amk, APPTDETAIL_amk
+  3  	     WHERE APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  4  	     AND APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode
+  5  	     GROUP BY APPOINTMENT_amk.ApptID, ApptDate,ApptTime, BLOCK_amk.BlockMinutes;
+
+   Appt ID Date      Time       Total Minutes                                                                           
+---------- --------- ---------- -------------                                                                           
+       101 01-SEP-18 9:00 AM               10                                                                           
+       102 01-SEP-18 9:00 AM               10                                                                           
+       108 01-SEP-18 10:30 AM              15                                                                           
+       111 02-SEP-18 1:00 PM               30                                                                           
+       112 03-SEP-18 10:30 AM              10                                                                           
+       101 01-SEP-18 9:00 AM               15                                                                           
+       113 03-SEP-18 11:00 AM              15                                                                           
+       103 01-SEP-18 9:30 AM               10                                                                           
+       104 01-SEP-18 9:40 AM               20                                                                           
+       109 02-SEP-18 11:00 AM              10                                                                           
+       106 01-SEP-18 10:00 AM              30                                                                           
+
+   Appt ID Date      Time       Total Minutes                                                                           
+---------- --------- ---------- -------------                                                                           
+       107 01-SEP-18 10:30 AM              20                                                                           
+       112 03-SEP-18 10:30 AM              45                                                                           
+       114 04-SEP-18 09:00 AM              30                                                                           
+       105 01-SEP-18 9:45 AM               15                                                                           
+       105 01-SEP-18 9:45 AM               10                                                                           
+       110 02-SEP-18 11:15 AM              30                                                                           
+
+17 rows selected.
+
+SQL> 
+SQL> --#18
+SQL> SELECT BLOCK_amk.BlockCode AS "BlockCode", BlockDesc AS "Description", COUNT(APPOINTMENT_amk.ApptID) AS "Count"
+  2  	     FROM BLOCK_amk, APPOINTMENT_amk, APPTDETAIL_amk
+  3  	     WHERE BLOCK_amk.BlockCode = APPTDETAIL_amk.BlockCode
+  4  	     AND APPTDETAIL_amk.ApptID = APPOINTMENT_amk.ApptID
+  5  	     GROUP BY BLOCK_amk.BlockCode, BlockDesc
+  6  	     ORDER BY COUNT(APPOINTMENT_amk.ApptID) DESC;
+
+BlockCode Description                 Count                                                                             
+--------- ---------------------- ----------                                                                             
+L1        Level 1                         7                                                                             
+L4        Level 4                         4                                                                             
+L2        Level 2                         4                                                                             
+L3        Level 3                         2                                                                             
+L5        Level 5                         1                                                                             
+
+SQL> 
+SQL> --#19
+SQL> SELECT PATIENT_amk.PatientID AS "Patient ID", PatientFName AS "First Name", PatientLName AS "Last Name", '(' || SUBSTR(PatientPhone, 1,3) ||')'|| SUBSTR(PatientPhone, 4,3) ||'-'|| SUBSTR(PatientPhone, 7,4) AS "Phone"
+  2  	     FROM PATIENT_amk
+  3  	     ORDER BY PATIENT_amk.PatientID;
+
+Patient ID First Name           Last Name            Phone                                                              
+---------- -------------------- -------------------- -------------------------------------------                        
+        15 Jeff                 Miner                (214)555-1234                                                      
+        23 Shelby               Day                  (817)555-1198                                                      
+        28 Renee                Walker               (214)555-9285                                                      
+        77 Kim                  Jackson              (817)555-4911                                                      
+        84 James                Clayton              (214)555-9285                                                      
+        97 Chris                Mancha               (469)555-3340                                                      
+       100 Breanna              Rhodes               (214)555-9191                                                      
+       101 Wesley               Tanner               (817)555-1193                                                      
+       105 Johnny               Redmond              (214)555-1084                                                      
+       119 Mary                 Vaughn               (817)555-2334                                                      
+       120 Amanda               Green                ()-                                                                
+
+11 rows selected.
+
+SQL> 
+SQL> --#20
+SQL> SELECT BILLINGTYPE_amk.BillingType AS "Pay Type", BillingTypeDesc AS "Description", COUNT(APPOINTMENT_amk.ApptID) AS "Count"
+  2  	     FROM BILLINGTYPE_amk, APPOINTMENT_amk
+  3  	     WHERE BILLINGTYPE_amk.BillingType = APPOINTMENT_amk.BillingType
+  4  	     GROUP BY BILLINGTYPE_amk.BillingType, BillingTypeDesc
+  5  	     ORDER BY COUNT(APPOINTMENT_amk.ApptID) DESC;
+
+Pay Type Description                 Count                                                                              
+-------- ---------------------- ----------                                                                              
+I        Insurance                       9                                                                              
+SP       Self Pay                        3                                                                              
+WC       Worker's Comp                   2                                                                              
+
+SQL> 
+SQL> --#21
+SQL> SELECT PATIENT_amk.PatientID AS "Patient ID", PatientFName AS "First Name", PatientLName AS "Last Name", '(' || SUBSTR(PatientPhone, 1,3) ||')'|| SUBSTR(PatientPhone, 4,3) ||'-'|| SUBSTR(PatientPhone, 7,4) AS "Phone"
+  2  	     FROM PATIENT_amk, APPOINTMENT_amk
+  3  	     WHERE PATIENT_amk.PatientID = APPOINTMENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.BillingType = 'SP';
+
+Patient ID First Name           Last Name            Phone                                                              
+---------- -------------------- -------------------- -------------------------------------------                        
+        15 Jeff                 Miner                (214)555-1234                                                      
+        15 Jeff                 Miner                (214)555-1234                                                      
+        97 Chris                Mancha               (469)555-3340                                                      
+
+SQL> 
+SQL> --#22
+SQL> SELECT ApptID AS "Appt ID", TO_CHAR(ApptDate, 'mm-dd-yy') AS "Date", APPOINTMENT_amk.PatientID AS "Patient ID", PATIENT_amk.PatientLName AS "Patient Last Name", APPOINTMENT_amk.DoctorID AS "Doctor ID", DOCTOR_amk.DoctorLName AS "Doctor Last Name", BILLINGTYPE_amk.BillingType AS "Pay Type", STATUS_amk.ApptStatusDesc AS "Appt Status Desc"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, DOCTOR_amk, STATUS_amk, BILLINGTYPE_amk
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.DoctorID = DOCTOR_amk.DoctorID
+  5  	     AND APPOINTMENT_amk.ApptStatusCode = STATUS_amk.ApptStatusCode
+  6  	     AND APPOINTMENT_amk.BillingType = BILLINGTYPE_amk.BillingType
+  7  	     AND ApptDate >= '03-SEP-2018'
+  8  	     ORDER BY ApptID;
+
+   Appt ID Date     Patient ID Patient Last Name     Doctor ID Doctor Last Name     Pay Type Appt Status Desc           
+---------- -------- ---------- -------------------- ---------- -------------------- -------- --------------------       
+       112 09-03-18        120 Green                         2 Smith                WC       Not Confirmed              
+       113 09-03-18         15 Miner                         2 Smith                SP       Confirmed                  
+       114 09-04-18        101 Tanner                        3 Schultz              I        Not Confirmed              
+
+SQL> 
+SQL> --#23
+SQL> SELECT DOCTOR_amk.DoctorID AS "Dr ID", (DoctorFName ||' '|| DoctorLName) AS "Dr Name", COUNT(APPOINTMENT_amk.ApptID) AS "Appt Count"
+  2  	     FROM DOCTOR_amk, APPOINTMENT_amk
+  3  	     WHERE DOCTOR_amk.DoctorID = APPOINTMENT_amk.DoctorID
+  4  	     GROUP BY DOCTOR_amk.DoctorID, DoctorFName, DoctorLName
+  5  	     ORDER BY DoctorLName;
+
+     Dr ID Dr Name                                   Appt Count                                                         
+---------- ----------------------------------------- ----------                                                         
+         5 Janice May                                         2                                                         
+         3 Ray Schultz                                        6                                                         
+         2 Michael Smith                                      6                                                         
+
+SQL> 
+SQL> --#24
+SQL> SELECT PATIENT_amk.PatientID AS "Patient ID", PatientFName AS "Patient First Name", PatientLName AS "Patient Last Name", COUNT(APPOINTMENT_amk.ApptID) AS "Appt Count"
+  2  	     FROM PATIENT_amk, APPOINTMENT_amk
+  3  	     WHERE PATIENT_amk.PatientID = APPOINTMENT_amk.PatientID
+  4  	     GROUP BY PATIENT_amk.PatientID, PatientFName, PatientLName
+  5  	     ORDER BY COUNT(APPOINTMENT_amk.ApptID) DESC;
+
+Patient ID Patient First Name   Patient Last Name    Appt Count                                                         
+---------- -------------------- -------------------- ----------                                                         
+       101 Wesley               Tanner                        2                                                         
+        15 Jeff                 Miner                         2                                                         
+        84 James                Clayton                       2                                                         
+        28 Renee                Walker                        1                                                         
+       100 Breanna              Rhodes                        1                                                         
+       105 Johnny               Redmond                       1                                                         
+        97 Chris                Mancha                        1                                                         
+       120 Amanda               Green                         1                                                         
+        23 Shelby               Day                           1                                                         
+       119 Mary                 Vaughn                        1                                                         
+        77 Kim                  Jackson                       1                                                         
+
+11 rows selected.
+
+SQL> 
+SQL> --#25
+SQL> SELECT APPOINTMENT_amk.ApptID AS "Appt", TO_CHAR(ApptDate, 'mm-dd-yy') AS "Date", APPOINTMENT_amk.PatientID AS "Patient ID", (PATIENT_amk.PatientFName ||' '|| PATIENT_amk.PatientLName) AS "Patient Name", APPOINTMENT_amk.DoctorID AS "Dr ID", DOCTOR_amk.DoctorLName AS "Dr Name", COUNT (APPTDETAIL_amk.ApptReasonCode) AS "Code Count"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, DOCTOR_amk, APPTDETAIL_amk
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.DoctorID = DOCTOR_amk.DoctorID
+  5  	     AND APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  6  	     GROUP BY APPOINTMENT_amk.ApptID,ApptDate, APPOINTMENT_amk.PatientID, PATIENT_amk.PatientFName, PATIENT_amk.PatientLName, APPOINTMENT_amk.DoctorID, DOCTOR_amk.DoctorLName
+  7  	     ORDER BY COUNT (APPTDETAIL_amk.ApptReasonCode) DESC, APPOINTMENT_amk.ApptID;
+
+      Appt Date     Patient ID Patient Name                                   Dr ID Dr Name              Code Count     
+---------- -------- ---------- ----------------------------------------- ---------- -------------------- ----------     
+       101 09-01-18        101 Wesley Tanner                                      2 Smith                         2     
+       102 09-01-18        100 Breanna Rhodes                                     5 May                           2     
+       105 09-01-18        119 Mary Vaughn                                        2 Smith                         2     
+       112 09-03-18        120 Amanda Green                                       2 Smith                         2     
+       103 09-01-18         15 Jeff Miner                                         2 Smith                         1     
+       104 09-01-18         77 Kim Jackson                                        3 Schultz                       1     
+       106 09-01-18         97 Chris Mancha                                       3 Schultz                       1     
+       107 09-01-18         28 Renee Walker                                       3 Schultz                       1     
+       108 09-01-18        105 Johnny Redmond                                     2 Smith                         1     
+       109 09-02-18         84 James Clayton                                      5 May                           1     
+       110 09-02-18         84 James Clayton                                      3 Schultz                       1     
+
+      Appt Date     Patient ID Patient Name                                   Dr ID Dr Name              Code Count     
+---------- -------- ---------- ----------------------------------------- ---------- -------------------- ----------     
+       111 09-02-18         23 Shelby Day                                         3 Schultz                       1     
+       113 09-03-18         15 Jeff Miner                                         2 Smith                         1     
+       114 09-04-18        101 Wesley Tanner                                      3 Schultz                       1     
+
+14 rows selected.
+
+SQL> 
+SQL> --#26
+SQL> SELECT APPOINTMENT_amk.ApptID AS "ApptID", ApptDate AS "Date", ApptTime AS "Time", SUM(BLOCK_amk.BlockMinutes) AS "Total Minutes"
+  2  	     FROM APPOINTMENT_amk, BLOCK_amk, APPTDETAIL_amk
+  3  	     WHERE APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  4  	     AND APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode
+  5  	     GROUP BY APPOINTMENT_amk.ApptID, ApptDate, ApptTime
+  6  	     HAVING SUM(BLOCK_amk.BlockMinutes) =
+  7  		     (SELECT MAX(sumQty) FROM (SELECT ApptID, SUM(BLOCK_amk.BlockMinutes) sumQty
+  8  							     FROM APPTDETAIL_amk, BLOCK_amk
+  9  							     WHERE APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode
+ 10  							     GROUP BY ApptID));
+
+    ApptID Date      Time       Total Minutes                                                                           
+---------- --------- ---------- -------------                                                                           
+       112 03-SEP-18 10:30 AM              55                                                                           
+
+SQL> 
+SQL> --#27
+SQL> SELECT DOCTOR_amk.DoctorID AS "Dr ID", (DoctorFName ||' '|| DoctorLName) AS "Name", COUNT(APPOINTMENT_amk.ApptID) AS "Appt Count"
+  2  	     FROM DOCTOR_amk, APPOINTMENT_amk
+  3  	     WHERE DOCTOR_amk.DoctorID = APPOINTMENT_amk.DoctorID
+  4  	     GROUP BY DOCTOR_amk.DoctorID, DoctorFName, DoctorLName
+  5  	     HAVING COUNT(APPOINTMENT_amk.ApptID) =
+  6  		     (SELECT MIN(docQty) FROM (SELECT DoctorID, COUNT(ApptID) docQty
+  7  						     FROM APPOINTMENT_amk
+  8  						     GROUP BY DoctorID));
+
+     Dr ID Name                                      Appt Count                                                         
+---------- ----------------------------------------- ----------                                                         
+         5 Janice May                                         2                                                         
+
+SQL> 
+SQL> --#28
+SQL> SELECT APPOINTMENT_amk.ApptID AS "Appt ID", ApptDate AS "Date", APPOINTMENT_amk.PatientID AS "Patient ID", PATIENT_amk.PatientLName AS "Patient Name", APPOINTMENT_amk.DoctorID AS "Doctor ID", DOCTOR_amk.DoctorLName AS "Doctor Name"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, DOCTOR_amk, BLOCK_AMK, APPTDETAIL_amk
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.DoctorID = DOCTOR_amk.DoctorID
+  5  	     AND APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  6  	     AND APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode
+  7  	     GROUP BY APPOINTMENT_amk.ApptID, ApptDate, APPOINTMENT_amk.PatientID, PATIENT_amk.PatientLName, APPOINTMENT_amk.DoctorID, DOCTOR_amk.DoctorLName
+  8  	     HAVING SUM(BLOCK_amk.BlockMinutes) >= 30
+  9  	     ORDER BY SUM(BLOCK_amk.BlockMinutes) DESC, APPOINTMENT_amk.ApptID;
+
+   Appt ID Date      Patient ID Patient Name          Doctor ID Doctor Name                                             
+---------- --------- ---------- -------------------- ---------- --------------------                                    
+       112 03-SEP-18        120 Green                         2 Smith                                                   
+       106 01-SEP-18         97 Mancha                        3 Schultz                                                 
+       110 02-SEP-18         84 Clayton                       3 Schultz                                                 
+       111 02-SEP-18         23 Day                           3 Schultz                                                 
+       114 04-SEP-18        101 Tanner                        3 Schultz                                                 
+
+SQL> 
+SQL> --#29
+SQL> SELECT APPOINTMENT_amk.ApptID AS "Appt ID", ApptDate AS "Date", PATIENT_amk.PatientLName AS "Patient", DOCTOR_amk.DoctorLName AS "Doctor", SUM(BLOCK_amk.BlockMinutes) AS "TotalMinutes"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, DOCTOR_amk, APPTDETAIL_amk, BLOCK_amk
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.DoctorID = DOCTOR_amk.DoctorID
+  5  	     AND APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  6  	     AND APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode
+  7  	     GROUP BY APPOINTMENT_amk.ApptID, ApptDate, PATIENT_amk.PatientLName, DOCTOR_amk.DoctorLName
+  8  	     HAVING SUM(BLOCK_amk.BlockMinutes) > (SELECT AVG(BlockMinutes)
+  9  						     FROM BLOCK_amk
+ 10  						     INNER JOIN APPTDETAIL_amk ON APPTDETAIL_amk.BlockCode = BLOCK_amk.BlockCode)
+ 11  	     ORDER BY APPOINTMENT_amk.ApptID;
+
+   Appt ID Date      Patient              Doctor               TotalMinutes                                             
+---------- --------- -------------------- -------------------- ------------                                             
+       101 01-SEP-18 Tanner               Smith                          25                                             
+       102 01-SEP-18 Rhodes               May                            20                                             
+       104 01-SEP-18 Jackson              Schultz                        20                                             
+       105 01-SEP-18 Vaughn               Smith                          25                                             
+       106 01-SEP-18 Mancha               Schultz                        30                                             
+       107 01-SEP-18 Walker               Schultz                        20                                             
+       110 02-SEP-18 Clayton              Schultz                        30                                             
+       111 02-SEP-18 Day                  Schultz                        30                                             
+       112 03-SEP-18 Green                Smith                          55                                             
+       114 04-SEP-18 Tanner               Schultz                        30                                             
+
+10 rows selected.
+
+SQL> 
+SQL> --#30
+SQL> SELECT APPOINTMENT_amk.ApptID AS "ApptID", ApptDate AS "Date", PATIENT_amk.PatientLName AS "Patient", BILLINGTYPE_amk.BillingType AS "PayType", INSCO_amk.InsCoName AS "InsCo", COUNT(APPTDETAIL_amk.ApptReasonCode) AS "ReasonCount"
+  2  	     FROM APPOINTMENT_amk, PATIENT_amk, BILLINGTYPE_amk, INSCO_amk, APPTDETAIL_AMK
+  3  	     WHERE APPOINTMENT_amk.PatientID = PATIENT_amk.PatientID
+  4  	     AND APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  5  	     AND APPOINTMENT_amk.BillingType = BILLINGTYPE_amk.BillingType
+  6  	     AND APPOINTMENT_amk.InsCoID = INSCO_amk.InsCoID
+  7  	     GROUP BY APPOINTMENT_amk.ApptID, ApptDate, PATIENT_amk.PatientLName, BILLINGTYPE_amk.BillingType, INSCO_amk.InsCoName
+  8  	     HAVING COUNT(APPTDETAIL_AMK.ApptReasonCode) >= 2
+  9  	     ORDER BY COUNT(APPTDETAIL_AMK.ApptReasonCode) DESC, APPOINTMENT_amk.ApptID;
+
+    ApptID Date      Patient              PayType InsCo                ReasonCount                                      
+---------- --------- -------------------- ------- -------------------- -----------                                      
+       101 01-SEP-18 Tanner               I       Humana                         2                                      
+       102 01-SEP-18 Rhodes               I       Blue Cross                     2                                      
+       105 01-SEP-18 Vaughn               I       Blue Cross                     2                                      
+       112 03-SEP-18 Green                WC      Cigna                          2                                      
+
+SQL> 
+SQL> --#31
+SQL> SELECT REASON_amk.ApptReasonCode AS "Reason Code", ApptReasonDesc As "Description", BLOCK_amk.BlockCode AS "Block Code", CONCAT(CONCAT(NumOfMin, ' '), 'Minutes') AS "Minutes"
+  2  	     FROM Reason_amk, APPTDETAIL_amk, Block_amk, (SELECT APPOINTMENT_amk.ApptID, MAX(BlockMinutes) AS NumOfMin
+  3  							     FROM APPOINTMENT_amk, APPTDETAIL_amk, BLOCK_amk
+  4  							     WHERE APPOINTMENT_amk.ApptID = APPTDETAIL_amk.ApptID
+  5  							     AND BLOCK_amk.BlockCode = APPTDETAIL_amk.BlockCode
+  6  							     GROUP BY APPOINTMENT_amk.ApptID) t1
+  7  	     WHERE REASON_amk.ApptReasonCode = APPTDETAIL_amk.ApptReasonCode
+  8  	     AND BLOCK_amk.BlockCode = APPTDETAIL_amk.BlockCode
+  9  	     AND t1.ApptID = APPTDETAIL_amk.ApptID;
+
+Reason Code Description            Block Code Minutes                                                                   
+----------- ---------------------- ---------- ------------------------------------------------                          
+PSF         Post-Surgery Follow Up L2         15 Minutes                                                                
+GBP         General Back Pain      L2         15 Minutes                                                                
+CSW         Complete Spinal Workup L5         45 Minutes                                                                
+NP          New Patient            L1         45 Minutes                                                                
+SR          Suture Removal         L1         10 Minutes                                                                
+PSF         Post-Surgery Follow Up L1         10 Minutes                                                                
+PT          Physical Therapy       L4         30 Minutes                                                                
+GBP         General Back Pain      L2         15 Minutes                                                                
+NP          New Patient            L1         15 Minutes                                                                
+PT          Physical Therapy       L3         20 Minutes                                                                
+PT          Physical Therapy       L4         30 Minutes                                                                
+
+Reason Code Description            Block Code Minutes                                                                   
+----------- ---------------------- ---------- ------------------------------------------------                          
+PT          Physical Therapy       L3         20 Minutes                                                                
+AI          Auto Injury            L2         15 Minutes                                                                
+NP          New Patient            L1         15 Minutes                                                                
+PSF         Post-Surgery Follow Up L1         10 Minutes                                                                
+PSF         Post-Surgery Follow Up L1         10 Minutes                                                                
+PT          Physical Therapy       L4         30 Minutes                                                                
+PT          Physical Therapy       L4         30 Minutes                                                                
+
+18 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> spool off
